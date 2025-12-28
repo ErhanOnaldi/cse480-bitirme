@@ -1,0 +1,36 @@
+# OS / editor
+.DS_Store
+.AppleDouble
+._*
+.idea/
+.vscode/
+*.swp
+*.swo
+*.tmp
+
+# Rust
+**/target/
+**/*.rs.bk
+
+# Logs / traces / generated results
+**/*.log
+**/*trace*.log
+**/*.progress.txt
+
+# LaTeX (report)
+**/*.aux
+**/*.bbl
+**/*.blg
+**/*.fdb_latexmk
+**/*.fls
+**/*.out
+**/*.synctex.gz
+**/*.toc
+**/*.lof
+**/*.lot
+**/*.nav
+**/*.snm
+**/*.vrb
+**/*.xdv
+**/*.pdf
+

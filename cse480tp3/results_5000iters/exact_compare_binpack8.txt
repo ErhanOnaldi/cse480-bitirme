@@ -1,0 +1,120 @@
+instance=binpack8_t501_00 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=184 gap_percent=10.18
+  run=2 seed=1 found_bins=184 gap_percent=10.18
+  run=3 seed=2 found_bins=182 gap_percent=8.98
+  run=4 seed=3 found_bins=184 gap_percent=10.18
+  run=5 seed=4 found_bins=183 gap_percent=9.58
+instance=binpack8_t501_01 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=183 gap_percent=9.58
+  run=2 seed=1 found_bins=184 gap_percent=10.18
+  run=3 seed=2 found_bins=184 gap_percent=10.18
+  run=4 seed=3 found_bins=184 gap_percent=10.18
+  run=5 seed=4 found_bins=185 gap_percent=10.78
+instance=binpack8_t501_02 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=182 gap_percent=8.98
+  run=2 seed=1 found_bins=181 gap_percent=8.38
+  run=3 seed=2 found_bins=184 gap_percent=10.18
+  run=4 seed=3 found_bins=186 gap_percent=11.38
+  run=5 seed=4 found_bins=183 gap_percent=9.58
+instance=binpack8_t501_03 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=183 gap_percent=9.58
+  run=2 seed=1 found_bins=183 gap_percent=9.58
+  run=3 seed=2 found_bins=182 gap_percent=8.98
+  run=4 seed=3 found_bins=183 gap_percent=9.58
+  run=5 seed=4 found_bins=183 gap_percent=9.58
+instance=binpack8_t501_04 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=184 gap_percent=10.18
+  run=2 seed=1 found_bins=183 gap_percent=9.58
+  run=3 seed=2 found_bins=183 gap_percent=9.58
+  run=4 seed=3 found_bins=184 gap_percent=10.18
+  run=5 seed=4 found_bins=184 gap_percent=10.18
+instance=binpack8_t501_05 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=184 gap_percent=10.18
+  run=2 seed=1 found_bins=183 gap_percent=9.58
+  run=3 seed=2 found_bins=184 gap_percent=10.18
+  run=4 seed=3 found_bins=185 gap_percent=10.78
+  run=5 seed=4 found_bins=183 gap_percent=9.58
+instance=binpack8_t501_06 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=181 gap_percent=8.38
+  run=2 seed=1 found_bins=182 gap_percent=8.98
+  run=3 seed=2 found_bins=183 gap_percent=9.58
+  run=4 seed=3 found_bins=184 gap_percent=10.18
+  run=5 seed=4 found_bins=181 gap_percent=8.38
+instance=binpack8_t501_07 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=183 gap_percent=9.58
+  run=2 seed=1 found_bins=182 gap_percent=8.98
+  run=3 seed=2 found_bins=182 gap_percent=8.98
+  run=4 seed=3 found_bins=184 gap_percent=10.18
+  run=5 seed=4 found_bins=183 gap_percent=9.58
+instance=binpack8_t501_08 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=182 gap_percent=8.98
+  run=2 seed=1 found_bins=186 gap_percent=11.38
+  run=3 seed=2 found_bins=183 gap_percent=9.58
+  run=4 seed=3 found_bins=183 gap_percent=9.58
+  run=5 seed=4 found_bins=184 gap_percent=10.18
+instance=binpack8_t501_09 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=183 gap_percent=9.58
+  run=2 seed=1 found_bins=185 gap_percent=10.78
+  run=3 seed=2 found_bins=182 gap_percent=8.98
+  run=4 seed=3 found_bins=184 gap_percent=10.18
+  run=5 seed=4 found_bins=182 gap_percent=8.98
+instance=binpack8_t501_10 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=182 gap_percent=8.98
+  run=2 seed=1 found_bins=182 gap_percent=8.98
+  run=3 seed=2 found_bins=182 gap_percent=8.98
+  run=4 seed=3 found_bins=183 gap_percent=9.58
+  run=5 seed=4 found_bins=185 gap_percent=10.78
+instance=binpack8_t501_11 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=182 gap_percent=8.98
+  run=2 seed=1 found_bins=183 gap_percent=9.58
+  run=3 seed=2 found_bins=182 gap_percent=8.98
+  run=4 seed=3 found_bins=183 gap_percent=9.58
+  run=5 seed=4 found_bins=184 gap_percent=10.18
+instance=binpack8_t501_12 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=185 gap_percent=10.78
+  run=2 seed=1 found_bins=182 gap_percent=8.98
+  run=3 seed=2 found_bins=183 gap_percent=9.58
+  run=4 seed=3 found_bins=183 gap_percent=9.58
+  run=5 seed=4 found_bins=183 gap_percent=9.58
+instance=binpack8_t501_13 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=182 gap_percent=8.98
+  run=2 seed=1 found_bins=183 gap_percent=9.58
+  run=3 seed=2 found_bins=187 gap_percent=11.98
+  run=4 seed=3 found_bins=183 gap_percent=9.58
+  run=5 seed=4 found_bins=183 gap_percent=9.58
+instance=binpack8_t501_14 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=183 gap_percent=9.58
+  run=2 seed=1 found_bins=182 gap_percent=8.98
+  run=3 seed=2 found_bins=181 gap_percent=8.38
+  run=4 seed=3 found_bins=185 gap_percent=10.78
+  run=5 seed=4 found_bins=180 gap_percent=7.78
+instance=binpack8_t501_15 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=184 gap_percent=10.18
+  run=2 seed=1 found_bins=183 gap_percent=9.58
+  run=3 seed=2 found_bins=185 gap_percent=10.78
+  run=4 seed=3 found_bins=183 gap_percent=9.58
+  run=5 seed=4 found_bins=185 gap_percent=10.78
+instance=binpack8_t501_16 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=182 gap_percent=8.98
+  run=2 seed=1 found_bins=184 gap_percent=10.18
+  run=3 seed=2 found_bins=183 gap_percent=9.58
+  run=4 seed=3 found_bins=182 gap_percent=8.98
+  run=5 seed=4 found_bins=182 gap_percent=8.98
+instance=binpack8_t501_17 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=183 gap_percent=9.58
+  run=2 seed=1 found_bins=184 gap_percent=10.18
+  run=3 seed=2 found_bins=186 gap_percent=11.38
+  run=4 seed=3 found_bins=185 gap_percent=10.78
+  run=5 seed=4 found_bins=186 gap_percent=11.38
+instance=binpack8_t501_18 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=183 gap_percent=9.58
+  run=2 seed=1 found_bins=184 gap_percent=10.18
+  run=3 seed=2 found_bins=182 gap_percent=8.98
+  run=4 seed=3 found_bins=184 gap_percent=10.18
+  run=5 seed=4 found_bins=185 gap_percent=10.78
+instance=binpack8_t501_19 exact_bins=167 exact_source=dataset-opt
+  run=1 seed=0 found_bins=184 gap_percent=10.18
+  run=2 seed=1 found_bins=185 gap_percent=10.78
+  run=3 seed=2 found_bins=185 gap_percent=10.78
+  run=4 seed=3 found_bins=183 gap_percent=9.58
+  run=5 seed=4 found_bins=184 gap_percent=10.18

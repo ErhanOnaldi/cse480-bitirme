@@ -1,0 +1,332 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Bibliography
+\usepackage[round]{natbib}
+\bibliographystyle{apalike}
+
+% Hyperref
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% Page style
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\fancyhead[L]{CSE480/591 - Optimization with Metaheuristics}
+\fancyhead[R]{Yeditepe University}
+\setlength{\headheight}{15pt}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\setstretch{1.2}
+
+\begin{document}
+
+% -------------------------
+% TITLE PAGE
+% -------------------------
+\begin{titlepage}
+    \centering
+    \includegraphics[width=0.5\textwidth]{yeditepe_logo.png}\\[1cm]
+    {\Large \textbf{YEDITEPE UNIVERSITY}}\\[4pt]
+    {\large Faculty of Engineering}\\[2pt]
+    {\large Department of Computer Engineering}\\[2cm]
+    {\huge \textbf{Term Project Report}}\\[0.4cm]
+    {\Large CSE480/591: Optimization with Metaheuristics}\\[1cm]
+    \vfill
+    \begin{flushleft}
+    \textbf{Student Name:} Barış Can Sertkaya / Erhan Önaldı\\[8pt]
+    \textbf{Student ID:} 20210702022 / 20210702136 \\[8pt]
+    \textbf{Date:} 30.10.2025\\[8pt]
+    \textbf{Project Title:} 1D Bin Packing Problem\\[2cm]
+    \end{flushleft}
+    \vfill
+    {\large \textbf{Instructor:} Asst. Prof. Dr. Gizem Süngü Terci}\\[0.3cm]
+    {\large Fall 2025 Semester}\\[1cm]
+\end{titlepage}
+
+% -------------------------
+% MAIN CONTENT
+% -------------------------
+
+\section{Selected Problem and Motivation}
+
+This project focuses on the One-Dimensional Bin Packing Problem, abbreviated as 1D-BPP, a well-known NP-hard combinatorial optimization problem. It models many real-world tasks such as minimizing storage space, container loading, or memory-allocation optimization. The objective is to assign a set of items with given sizes into the fewest possible fixed-capacity bins without exceeding any capacity limit.
+
+The 1D Bin Packing Problem is chosen because it has a clear mathematical structure yet allows creative metaheuristic exploration. It is also a classic optimization problem that is easy to visualize and test, which makes it ideal for experimenting with different algorithms and comparing their performance.
+
+From a student perspective, it offers a good balance between implementation difficulty and conceptual clarity. It is complex enough to be interesting, but still manageable to code, analyze, and present meaningful results within the project timeline.
+
+\section{Formal Problem Definition}
+
+In the 1D Bin Packing Problem, we decide which bin each item will be placed into. Each item must be assigned to exactly one bin, and no bin capacity can be exceeded.
+
+\subsection{Decision Variables}
+
+Let $x_{ij} = 1$ if item $i$ is placed in bin $j$, and $0$ otherwise. Here:
+
+\begin{itemize}
+    \item $i = 1, 2, \ldots, n$ represents the items,
+    \item $j = 1, 2, \ldots, m$ represents the bins; $m$ is an upper bound on the number of bins.
+\end{itemize}
+
+Let $y_j = 1$ if bin $j$ is used, and $0$ otherwise.
+
+\subsection{Objective Function}
+
+The main objective is to minimize the total number of bins used:
+
+\[
+\min \sum_{j=1}^{m} y_j
+\]
+
+In the metaheuristic implementation, the fitness function is defined as:
+
+\[
+f = B + \alpha \times \text{capacity violation}
+\]
+
+where $B$ is the number of bins used and $\alpha$ is a penalty coefficient discouraging infeasible solutions.
+
+\subsection{Constraints}
+
+\begin{enumerate}
+    \item \textbf{Assignment constraint:} Each item must be placed in exactly one bin.
+    \[
+    \sum_{j=1}^{m} x_{ij} = 1 \quad \forall i
+    \]
+    \item \textbf{Capacity constraint:} The total size of items in a bin cannot exceed its capacity $C$.
+    \[
+    \sum_{i=1}^{n} s_i x_{ij} \le C \quad \forall j
+    \]
+    \item \textbf{Bin usage constraint:} If a bin is not used, no items can be assigned to it.
+    \[
+    x_{ij} \le y_j \quad \forall i, j
+    \]
+\end{enumerate}
+
+\section{Dataset or Benchmark Instances}
+
+\textbf{Benchmark Instances:}  
+The Falkenauer dataset \citep{falkenauer1996hybrid} from the OR-Library \citep{beasley1990orlibrary} is a standard benchmark for 1D bin packing.
+
+\textbf{Instances used in Phase 3 experiments:}
+\begin{itemize}
+    \item \textbf{TP2 example instance:} 7 items, capacity 60, defined in Section 4 and used for correctness verification.
+    \item \textbf{OR-Library / BinPack benchmark files:} each file contains 20 instances. We used \texttt{binpack2.txt} with instances named u250\_**, \texttt{binpack4.txt} with u1000\_**, \texttt{binpack7.txt} with t249\_**, and \texttt{binpack8.txt} with t501\_**. Some instances use decimal sizes such as 36.6; these values are scaled to integers for computation without changing feasibility or the objective.
+\end{itemize}
+
+\textbf{Synthetic Instances:}  
+We generated additional synthetic instances using uniformly distributed item sizes:
+\[
+s_i \sim U[10, 100]
+\]
+with bin capacity:
+\[
+C = 150
+\]
+
+In Phase 3 experiments, we used three synthetic instances with $n$ values 60, 120, and 200. The random generator seed was fixed to ensure reproducibility.
+
+\section{Example Scenario / Problem Instance}
+
+To illustrate the structure of the One-Dimensional Bin Packing Problem, 1D-BPP, and provide a concrete test case for the metaheuristic algorithms developed in this project, we construct a small but representative problem instance. The instance includes seven items with heterogeneous sizes and a fixed bin capacity, reflecting typical bin packing characteristics while remaining simple enough for step-by-step algorithmic analysis.
+
+\begin{table}[h!]
+\centering
+\caption{Example instance for the 1D Bin Packing Problem}
+\begin{tabular}{c c}
+\hline
+\textbf{Item} & \textbf{Size} \\ \hline
+1 & 22 \\
+2 & 17 \\
+3 & 45 \\
+4 & 12 \\
+5 & 38 \\
+6 & 27 \\
+7 & 19 \\ \hline
+\textbf{Bin Capacity} & \textbf{60} \\ \hline
+\end{tabular}
+\end{table}
+
+This instance contains items whose sizes vary between small values such as 12 and relatively large values such as 45, creating natural packing difficulty and multiple feasible arrangement combinations. The bin capacity is set to 60, enabling meaningful exploration--exploitation behavior in local search metaheuristics. Although the instance is small-scale, it captures the essential constraints of 1D-BPP and is used in Phase 3 to verify that the implementation is correct.
+
+% -------------------------
+% PHASE 3 CONTENT
+% -------------------------
+
+\section{Metaheuristic Algorithm Design and Implementation: Tabu Search}
+
+\subsection{Solution Representation}
+We represent a candidate solution as a \textbf{permutation} of item indices. A permutation is decoded into an actual packing using a constructive heuristic:
+\begin{itemize}
+    \item \textbf{Decoder: Best-Fit packing.} Best Fit Decreasing-like behavior depends on the permutation order. Items are inserted one-by-one into the feasible bin that leaves the least remaining space; if no bin can fit the item, a new bin is opened.
+    \item \textbf{Post-processing: Bin reduction.} After decoding, a greedy relocation procedure tries to empty low-load bins by moving their items into other bins using a largest-first relocation rule. If all items of a bin can be relocated, that bin is removed.
+\end{itemize}
+
+\subsection{Objective Function}
+The primary objective is to \textbf{minimize the number of bins used}. For tie-breaking between solutions with the same number of bins, we minimize the total unused capacity:
+\[
+f_{\pi} = \left\langle B_{\pi},\ U_{\pi}\right\rangle
+\]
+where $B_{\pi}$ is the number of bins and $U_{\pi}=\sum_j [C - \text{load}_j]$ is total unused capacity for the decoded packing. Solutions are compared lexicographically.
+
+\subsection{Initialization}
+The initial permutation is generated by sorting items in decreasing size, using deterministic tie-breaking, to obtain a strong baseline packing.
+
+\subsection{Neighborhood Structure}
+We use a sampled neighborhood consisting of two move types applied to the permutation:
+\begin{itemize}
+    \item \textbf{Swap:} swap two positions in the permutation.
+    \item \textbf{Insert:} remove the item at position $i$ and insert it at position $j$.
+\end{itemize}
+For each iteration, a fixed number of random neighbor moves are sampled; see Section 6.1.2.
+
+\subsection{Tabu Memory and Aspiration}
+Each accepted move is stored in a short-term tabu list, FIFO order, with tenure $\tau$. A tabu move may still be accepted if it satisfies the \textbf{aspiration criterion}, meaning it improves the global best objective.
+
+\subsection{Stopping Criteria and Diversification}
+The algorithm stops when one of the following is reached:
+\begin{itemize}
+    \item maximum iteration limit,
+    \item time limit per run,
+    \item reaching the lower bound $ \left\lceil \sum_i s_i / C \right\rceil$ on the number of bins.
+\end{itemize}
+If no improvement is observed for a fixed stagnation window, we diversify by shuffling the current permutation and clearing the tabu list.
+
+\subsection{Pseudo Code, Algorithm Implementation Only}
+\begin{algorithm}[htbp]
+\caption{Tabu Search for 1D Bin Packing, permutation representation}
+\begin{algorithmic}[1]
+\State \textbf{Input:} capacity $C$, item sizes $s_1..s_n$, parameters $I_{\max}, K, \tau, S, T$
+\State $\pi \gets$ initial permutation, decreasing sizes
+\State $x \gets$ \textsc{Decode} $\pi$ using Best-Fit
+\State $x \gets$ \textsc{ReduceBins} $x$
+\State $B^\star \gets$ \textsc{Bins} $x$; $U^\star \gets$ \textsc{Unused} $x$; $\pi^\star \gets \pi$
+\State TabuList $\gets \emptyset$; $it^\star \gets 0$
+\For{$it = 1$ to $I_{\max}$}
+    \If{time $\ge T$} \State \textbf{break} \EndIf
+    \If{$it - it^\star \ge S$}
+        \State $\pi \gets$ \textsc{Shuffle} $\pi^\star$; TabuList $\gets \emptyset$
+    \EndIf
+    \State $\pi_{\text{cand}} \gets \emptyset$; $m_{\text{cand}} \gets \emptyset$; $x_{\text{cand}} \gets \emptyset$
+    \State $B_{\text{cand}} \gets +\infty$; $U_{\text{cand}} \gets +\infty$
+    \For{$k=1$ to $K$} \Comment{sample $K$ moves}
+        \State $m \gets$ random move, Swap or Insert
+        \State $\pi' \gets$ apply move $m$ to $\pi$
+        \State $x' \gets$ \textsc{Decode} $\pi'$
+        \State $x' \gets$ \textsc{ReduceBins} $x'$
+        \State $B' \gets$ \textsc{Bins} $x'$; $U' \gets$ \textsc{Unused} $x'$
+        \If{$m$ is tabu \textbf{and} not improving global best} \State \textbf{continue} \EndIf
+        \If{$B' < B_{\text{cand}}$ \textbf{or} $B' = B_{\text{cand}}$ \textbf{and} $U' < U_{\text{cand}}$}
+            \State $\pi_{\text{cand}} \gets \pi'$; $m_{\text{cand}} \gets m$; $x_{\text{cand}} \gets x'$
+            \State $B_{\text{cand}} \gets B'$; $U_{\text{cand}} \gets U'$
+        \EndIf
+    \EndFor
+    \If{$\pi_{\text{cand}}$ is empty} \State \textbf{continue} \EndIf
+    \State $\pi \gets \pi_{\text{cand}}$; $m \gets m_{\text{cand}}$; $x \gets x_{\text{cand}}$
+    \State $B \gets B_{\text{cand}}$; $U \gets U_{\text{cand}}$
+    \State add $m$ to TabuList, tenure $\tau$
+    \If{$B < B^\star$ \textbf{or} $B = B^\star$ \textbf{and} $U < U^\star$}
+        \State $B^\star \gets B$; $U^\star \gets U$; $\pi^\star \gets \pi$; $it^\star \gets it$
+        \If{$B^\star$ equals lower bound} \State \textbf{break} \EndIf
+    \EndIf
+\EndFor
+\State \textbf{Output:} best solution $\pi^\star$ and decoded packing $x^\star$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Experimental Study}
+
+\subsection{Experimental Setup}
+\subsubsection{System Information}
+All experiments were executed on:
+\begin{itemize}
+    \item OS: macOS 26.1, Build 25B78
+    \item CPU: Apple M4, arm64
+    \item RAM: 16 GB
+    \item Programming language: Rust, rustc 1.91.1
+\end{itemize}
+
+\subsubsection{Algorithm Parameters}
+Unless stated otherwise, the following Tabu Search parameters were used for each run:
+\begin{itemize}
+    \item Max iterations: 5000
+    \item Time limit: 10 seconds per run
+    \item Neighborhood samples per iteration: 200
+    \item Tabu tenure: 25
+    \item Stagnation limit, diversification: 600 iterations
+    \item Runs per instance: 5, seeds 0--4
+\end{itemize}
+
+\subsection{Experimental Results}
+Tables below report the required statistics for each instance: mean objective value as mean number of bins, best objective value as minimum bins, standard deviation, mean computation time, and best computation time over 5 runs.
+
+\subsection{Distance to Exact Solution}
+In addition to the performance statistics, we report the distance of each heuristic run to an exact reference solution.
+\begin{itemize}
+    \item For the TP2 example instance, the exact minimum number of bins is computed using an exact branch-and-bound procedure, which is feasible due to the small problem size.
+    \item For the BinPack benchmark instances, the third value in the instance header provides the known optimal number of bins. We use this as the exact reference.
+\end{itemize}
+For each run, the percentage gap is computed as:
+\[
+\text{gap}(\%) = \frac{B_{\text{found}} - B_{\text{exact}}}{B_{\text{exact}}}\times 100
+\]
+
+\input{../cse480tp3/results_10s/tp2_table.tex}
+
+\input{../cse480tp3/results_10s/synthetic_table.tex}
+
+\clearpage
+\scriptsize
+\setlength{\LTpre}{6pt}
+\setlength{\LTpost}{6pt}
+
+\input{../cse480tp3/results_10s/binpack2_longtable.tex}
+
+\clearpage
+\input{../cse480tp3/results_10s/binpack4_longtable.tex}
+
+\clearpage
+\input{../cse480tp3/results_10s/binpack7_longtable.tex}
+
+\clearpage
+\input{../cse480tp3/results_10s/binpack8_longtable.tex}
+
+\normalsize
+
+\section{Discussion and Conclusion}
+This phase implemented a permutation-based Tabu Search algorithm for the 1D Bin Packing Problem in Rust and validated it on the TP2 example instance. The experimental study followed the course requirement of running each instance 5 times and reporting mean/best/std objective values along with computation time.
+
+Across the benchmark instances, results are stable across different random seeds. In some cases, the algorithm terminates early when it reaches the theoretical lower bound on the number of bins. Overall, Tabu Search provides a practical balance between solution quality and computation time for medium-to-large instances.
+
+% -------------------------
+% REFERENCES
+% -------------------------
+\clearpage
+\section*{References}
+\bibliography{references}
+
+\end{document}

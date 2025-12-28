@@ -1,0 +1,4 @@
+# Bin Packing instance format (whitespace-separated integers):
+#   n capacity size1 size2 ... size_n
+7 60 22 17 45 12 38 27 19
+

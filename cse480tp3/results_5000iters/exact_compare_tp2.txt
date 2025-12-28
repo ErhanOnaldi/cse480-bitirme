@@ -1,0 +1,6 @@
+instance=TP2_example.bpp exact_bins=4 exact_source=bruteforce
+  run=1 seed=0 found_bins=4 gap_percent=0.00
+  run=2 seed=1 found_bins=4 gap_percent=0.00
+  run=3 seed=2 found_bins=4 gap_percent=0.00
+  run=4 seed=3 found_bins=4 gap_percent=0.00
+  run=5 seed=4 found_bins=4 gap_percent=0.00
