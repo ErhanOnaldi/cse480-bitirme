@@ -10,6 +10,15 @@ pub struct ExactRef {
     pub source: &'static str,
 }
 
+fn lower_bound_bins(instance: &Instance) -> usize {
+    if instance.capacity == 0 {
+        return 0;
+    }
+    let total: u64 = instance.sizes.iter().map(|&v| v as u64).sum();
+    let cap: u64 = instance.capacity as u64;
+    ((total + cap - 1) / cap) as usize
+}
+
 pub fn exact_reference(instance: &Instance) -> Option<ExactRef> {
     if let Some(b) = instance.opt_bins {
         return Some(ExactRef {
@@ -24,7 +33,11 @@ pub fn exact_reference(instance: &Instance) -> Option<ExactRef> {
             source: "bruteforce",
         });
     }
-    None
+    // Fallback reference (not exact): capacity lower bound.
+    Some(ExactRef {
+        bins: lower_bound_bins(instance),
+        source: "lower-bound",
+    })
 }
 
 pub fn gap_percent(found: usize, exact: usize) -> f64 {

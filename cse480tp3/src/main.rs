@@ -13,7 +13,7 @@ use cse480tp3::tabu::{tabu_search, tabu_search_trace, TabuParams, TraceConfig};
 
 fn usage() -> ! {
     eprintln!(
-        "Usage:\n  cargo run --release -- run-example\n  cargo run --release -- trace-tp2 [--iters N] [--samples K] [--tenure T] [--seed S] [--show-packings] [--no-candidates]\n  cargo run --release -- compare-exact-file <FILE> [--runs N] [--seed0 S] [--skip S] [--take K] [--time-limit-s T]\n  cargo run --release -- report-file <FILE> [--runs N] [--seed0 S] [--skip S] [--take K] [--time-limit-s T] [--progress]\n  cargo run --release -- run-batch [--runs N] [--seed0 S] [--time-limit-s T] [--progress]\n  cargo run --release -- run-file <FILE> [--runs N] [--seed0 S] [--skip S] [--take K] [--time-limit-s T] [--progress]\n  cargo run --release -- run-dir <DIR> [--runs N] [--seed0 S] [--skip S] [--take K] [--time-limit-s T] [--progress]\n"
+        "Usage:\n  cargo run --release -- run-example\n  cargo run --release -- trace-tp2 [--iters N] [--samples K] [--tenure T] [--seed S] [--show-packings] [--no-candidates]\n  cargo run --release -- compare-exact-file <FILE> [--runs N] [--seed0 S] [--skip S] [--take K] [--time-limit-s T]\n  cargo run --release -- report-file <FILE> [--runs N] [--seed0 S] [--skip S] [--take K] [--time-limit-s T] [--progress]\n  cargo run --release -- report-batch [--runs N] [--seed0 S] [--time-limit-s T] [--progress]\n  cargo run --release -- run-batch [--runs N] [--seed0 S] [--time-limit-s T] [--progress]\n  cargo run --release -- run-file <FILE> [--runs N] [--seed0 S] [--skip S] [--take K] [--time-limit-s T] [--progress]\n  cargo run --release -- run-dir <DIR> [--runs N] [--seed0 S] [--skip S] [--take K] [--time-limit-s T] [--progress]\n"
     );
     std::process::exit(2);
 }
@@ -394,6 +394,68 @@ fn run_batch(args: &[String]) -> i32 {
     0
 }
 
+fn report_batch(args: &[String]) -> i32 {
+    let mut runs: u32 = 5;
+    let mut seed0: u64 = 0;
+    let mut time_limit_s: f64 = 2.0;
+    let mut progress = false;
+
+    let mut i = 0;
+    while i < args.len() {
+        match args[i].as_str() {
+            "--runs" => {
+                runs = parse_u32("--runs", args.get(i + 1));
+                i += 2;
+            }
+            "--seed0" => {
+                seed0 = parse_u64("--seed0", args.get(i + 1));
+                i += 2;
+            }
+            "--time-limit-s" => {
+                time_limit_s = parse_f64("--time-limit-s", args.get(i + 1));
+                i += 2;
+            }
+            "--progress" => {
+                progress = true;
+                i += 1;
+            }
+            "--help" | "-h" => usage(),
+            other => {
+                eprintln!("Unknown arg: {other}");
+                usage()
+            }
+        }
+    }
+
+    let time_limit = if time_limit_s <= 0.0 {
+        None
+    } else {
+        Some(Duration::from_secs_f64(time_limit_s))
+    };
+
+    let params = TabuParams {
+        max_iters: 5_000,
+        neighborhood_samples: 200,
+        tabu_tenure: 25,
+        stagnation_limit: 600,
+        time_limit,
+    };
+
+    let mut summaries = Vec::new();
+    for inst in default_batch_instances() {
+        let s = if progress {
+            let mut stderr = std::io::stderr().lock();
+            run_instance_with_exact_verbose(&inst, runs, seed0, params, &mut stderr)
+        } else {
+            run_instance_with_exact(&inst, runs, seed0, params)
+        };
+        summaries.push(s);
+    }
+
+    print!("{}", format_exact_gap_table(&summaries));
+    0
+}
+
 fn run_dir(args: &[String]) -> i32 {
     if args.is_empty() {
         usage();
@@ -581,6 +643,7 @@ fn main() {
         "trace-tp2" => trace_tp2(&args[2..]),
         "compare-exact-file" => compare_exact_file(&args[2..]),
         "report-file" => report_file(&args[2..]),
+        "report-batch" => report_batch(&args[2..]),
         "run-batch" => run_batch(&args[2..]),
         "run-file" => run_file(&args[2..]),
         "run-dir" => run_dir(&args[2..]),

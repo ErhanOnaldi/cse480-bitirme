@@ -16,6 +16,7 @@
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
@@ -102,13 +103,14 @@ The main objective is to minimize the total number of bins used:
 \min \sum_{j=1}^{m} y_j
 \]
 
-In the metaheuristic implementation, the fitness function is defined as:
+In the metaheuristic implementation, a commonly used fitness function is:
 
 \[
 f = B + \alpha \times \text{capacity violation}
 \]
 
 where $B$ is the number of bins used and $\alpha$ is a penalty coefficient discouraging infeasible solutions.
+In our implementation, the decoder always constructs \textbf{feasible} packings (no capacity violation), so the violation term is always zero. Therefore, the effective objective is minimizing $B$, with unused capacity used only as a tie-breaker as described in Section 5.
 
 \subsection{Constraints}
 
@@ -148,7 +150,7 @@ with bin capacity:
 C = 150
 \]
 
-In Phase 3 experiments, we used three synthetic instances with $n$ values 60, 120, and 200. The random generator seed was fixed to ensure reproducibility.
+In Phase 3 experiments, we used three synthetic instances with $n$ values 60, 120, and 200. While synthetic instance difficulty can be controlled by a ``tightness'' factor (as discussed in earlier phases), in this phase we kept the distribution and capacity fixed and varied $n$, using a fixed seed for reproducibility.
 
 \section{Example Scenario / Problem Instance}
 
@@ -283,12 +285,18 @@ Unless stated otherwise, the following Tabu Search parameters were used for each
 
 \subsection{Experimental Results}
 Tables below report the required statistics for each instance: mean objective value as mean number of bins, best objective value as minimum bins, standard deviation, mean computation time, and best computation time over 5 runs.
+For each instance, we additionally report:
+\begin{itemize}
+    \item \textbf{Exact:} a reference number of bins (OPT if available; otherwise a lower bound).
+    \item \textbf{Gap\% runs:} the percentage gap for each run (5 values), computed relative to this reference.
+\end{itemize}
 
 \subsection{Distance to Exact Solution}
 In addition to the performance statistics, we report the distance of each heuristic run to an exact reference solution.
 \begin{itemize}
-    \item For the TP2 example instance, the exact minimum number of bins is computed using an exact branch-and-bound procedure, which is feasible due to the small problem size.
-    \item For the BinPack benchmark instances, the third value in the instance header provides the known optimal number of bins. We use this as the exact reference.
+    \item \textbf{TP2 example instance:} the exact minimum number of bins is computed using an exact enumeration with pruning (branch-and-bound). This is feasible only because the instance is very small ($n=7$).
+    \item \textbf{BinPack benchmark instances:} the third value in the instance header provides the known optimal number of bins. We use this as the exact reference (OPT).
+    \item \textbf{Synthetic instances:} computing OPT is not tractable at these sizes. Instead, we report the capacity lower bound $ \left\lceil \sum_i s_i / C \right\rceil $ as the reference in the \textbf{Exact} column, and compute Gap\% runs relative to this bound.
 \end{itemize}
 For each run, the percentage gap is computed as:
 \[
@@ -320,7 +328,9 @@ For each run, the percentage gap is computed as:
 \section{Discussion and Conclusion}
 This phase implemented a permutation-based Tabu Search algorithm for the 1D Bin Packing Problem in Rust and validated it on the TP2 example instance. The experimental study followed the course requirement of running each instance 5 times and reporting mean/best/std objective values along with computation time.
 
-Across the benchmark instances, results are stable across different random seeds. In some cases, the algorithm terminates early when it reaches the theoretical lower bound on the number of bins. Overall, Tabu Search provides a practical balance between solution quality and computation time for medium-to-large instances.
+Across the benchmark instances, results are stable across different random seeds. Many benchmark runs terminate close to the 10-second time limit, which explains why mean and best time values are often very similar across runs. Standard deviation is frequently zero when all 5 runs converge to the same number of bins within the time limit; nonzero standard deviation appears in instances where at least one run reaches a different bin count (e.g., by finding a slightly better packing).
+
+On the BinPack instances, the reported Exact values show that the algorithm typically remains within a small percentage gap of OPT under the given runtime and parameter limits. Overall, Tabu Search provides a practical balance between solution quality and computation time for medium-to-large instances, while the exact comparison helps quantify how close the heuristic solutions are to the optimum.
 
 % -------------------------
 % REFERENCES

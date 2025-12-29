@@ -1,17 +1,18 @@
 {%
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{0.95}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.00}
+\small
 \begin{table}[H]
 \centering
 \caption{Results on synthetic instances, 5 runs each}
-\begin{tabular}{lrrrrrrp{4.5cm}}
+\begin{tabularx}{\textwidth}{@{}p{2.8cm}rrrrrr>{\raggedright\arraybackslash}X@{}}
 \toprule
-Instance & Exact & Mean Obj & Best Obj & Std. Dev. & Mean Time [s] & Best Time [s] & Gap\% runs\\
+Instance & Exact & \shortstack{Mean\\Obj} & \shortstack{Best\\Obj} & \shortstack{Std.\\Dev.} & \shortstack{Mean\\Time [s]} & \shortstack{Best\\Time [s]} & Gap\% runs\\
 \midrule
-\texttt{\detokenize{synthetic-60}} & - & 24.00 & 24 & 0.00 & 4.3736 & 4.3393 & - \\
-\texttt{\detokenize{synthetic-120}} & - & 48.00 & 48 & 0.00 & 9.8773 & 9.7572 & - \\
-\texttt{\detokenize{synthetic-200}} & - & 78.00 & 78 & 0.00 & 10.0023 & 10.0005 & - \\
+\texttt{\detokenize{synthetic-60}} & 24 & 24.00 & 24 & 0.00 & 4.2377 & 4.1850 & \texttt{0.00,\allowbreak 0.00,\allowbreak 0.00,\allowbreak 0.00,\allowbreak 0.00} \\
+\texttt{\detokenize{synthetic-120}} & 47 & 48.00 & 48 & 0.00 & 9.6286 & 9.4925 & \texttt{2.13,\allowbreak 2.13,\allowbreak 2.13,\allowbreak 2.13,\allowbreak 2.13} \\
+\texttt{\detokenize{synthetic-200}} & 78 & 78.00 & 78 & 0.00 & 10.0027 & 10.0001 & \texttt{0.00,\allowbreak 0.00,\allowbreak 0.00,\allowbreak 0.00,\allowbreak 0.00} \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 }%

@@ -13,7 +13,8 @@ rows_from_report_file() {
     NF == 0 { next }
     {
       inst=$1; exact=$2; mean=$3; best=$4; std=$5; mt=$6; bt=$7; gap=$8;
-      printf "\\texttt{\\detokenize{%s}} & %s & %s & %s & %s & %s & %s & \\texttt{\\detokenize{%s}} \\\\\n", inst, exact, mean, best, std, mt, bt, gap
+      gsub(/,/, ",\\allowbreak ", gap);
+      printf "\\texttt{\\detokenize{%s}} & %s & %s & %s & %s & %s & %s & \\texttt{%s} \\\\\n", inst, exact, mean, best, std, mt, bt, gap
     }
   ' "${report_path}"
 }
@@ -30,22 +31,37 @@ rows_from_synthetic_runbatch() {
   ' "${report_path}"
 }
 
+rows_from_report_file_prefix() {
+  local report_path="$1"
+  local prefix="$2"
+  awk -v prefix="${prefix}" '
+    NR <= 2 { next }
+    NF == 0 { next }
+    $1 ~ ("^" prefix) {
+      inst=$1; exact=$2; mean=$3; best=$4; std=$5; mt=$6; bt=$7; gap=$8;
+      gsub(/,/, ",\\allowbreak ", gap);
+      printf "\\texttt{\\detokenize{%s}} & %s & %s & %s & %s & %s & %s & \\texttt{%s} \\\\\n", inst, exact, mean, best, std, mt, bt, gap
+    }
+  ' "${report_path}"
+}
+
 write_tp2_table() {
   local out_path="${RESULTS_DIR}/tp2_table.tex"
   {
     echo "{%"
-    echo "\\setlength{\\tabcolsep}{4pt}"
-    echo "\\renewcommand{\\arraystretch}{0.95}"
+    echo "\\setlength{\\tabcolsep}{3pt}"
+    echo "\\renewcommand{\\arraystretch}{1.00}"
+    echo "\\small"
     echo "\\begin{table}[H]"
     echo "\\centering"
     echo "\\caption{Results on TP2 example instance, 5 runs}"
-    echo "\\begin{tabular}{lrrrrrrp{4.5cm}}"
+    echo "\\begin{tabularx}{\\textwidth}{@{}p{2.8cm}rrrrrr>{\\raggedright\\arraybackslash}X@{}}"
     echo "\\toprule"
-    echo "Instance & Exact & Mean Obj & Best Obj & Std. Dev. & Mean Time [s] & Best Time [s] & Gap\\% runs\\\\"
+    echo "Instance & Exact & \\shortstack{Mean\\\\Obj} & \\shortstack{Best\\\\Obj} & \\shortstack{Std.\\\\Dev.} & \\shortstack{Mean\\\\Time [s]} & \\shortstack{Best\\\\Time [s]} & Gap\\% runs\\\\"
     echo "\\midrule"
     rows_from_report_file "${RESULTS_DIR}/tp2_report.txt"
     echo "\\bottomrule"
-    echo "\\end{tabular}"
+    echo "\\end{tabularx}"
     echo "\\end{table}"
     echo "}%"
   } > "${out_path}"
@@ -55,18 +71,23 @@ write_synthetic_table() {
   local out_path="${RESULTS_DIR}/synthetic_table.tex"
   {
     echo "{%"
-    echo "\\setlength{\\tabcolsep}{4pt}"
-    echo "\\renewcommand{\\arraystretch}{0.95}"
+    echo "\\setlength{\\tabcolsep}{3pt}"
+    echo "\\renewcommand{\\arraystretch}{1.00}"
+    echo "\\small"
     echo "\\begin{table}[H]"
     echo "\\centering"
     echo "\\caption{Results on synthetic instances, 5 runs each}"
-    echo "\\begin{tabular}{lrrrrrrp{4.5cm}}"
+    echo "\\begin{tabularx}{\\textwidth}{@{}p{2.8cm}rrrrrr>{\\raggedright\\arraybackslash}X@{}}"
     echo "\\toprule"
-    echo "Instance & Exact & Mean Obj & Best Obj & Std. Dev. & Mean Time [s] & Best Time [s] & Gap\\% runs\\\\"
+    echo "Instance & Exact & \\shortstack{Mean\\\\Obj} & \\shortstack{Best\\\\Obj} & \\shortstack{Std.\\\\Dev.} & \\shortstack{Mean\\\\Time [s]} & \\shortstack{Best\\\\Time [s]} & Gap\\% runs\\\\"
     echo "\\midrule"
-    rows_from_synthetic_runbatch "${RESULTS_DIR}/synthetic_runbatch.txt"
+    if [[ -f "${RESULTS_DIR}/batch_report.txt" ]]; then
+      rows_from_report_file_prefix "${RESULTS_DIR}/batch_report.txt" "synthetic-"
+    else
+      rows_from_synthetic_runbatch "${RESULTS_DIR}/synthetic_runbatch.txt"
+    fi
     echo "\\bottomrule"
-    echo "\\end{tabular}"
+    echo "\\end{tabularx}"
     echo "\\end{table}"
     echo "}%"
   } > "${out_path}"
